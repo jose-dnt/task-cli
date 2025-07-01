@@ -116,7 +116,7 @@ if len(arguments) > 0:
         case "update":
             if len(arguments[1:]) > 1:
                 id = int(arguments[1])
-                description = arguments[2:]
+                description = " ".join(arguments[2:])
                 if isinstance(id, int) and id >= 1 and find_task_by_id(id):
                     update_task(id, description)
         case "delete":
