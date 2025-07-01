@@ -58,7 +58,7 @@ def update_task(id, description):
     task = find_task_by_id(id)
     if not task:
         return
-    task.update_description(description)
+    task["description"] = description
 
 
 def delete_task(id):
