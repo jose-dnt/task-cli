@@ -1,3 +1,4 @@
+import sys
 from datetime import datetime
 
 tasks = []
@@ -8,16 +9,16 @@ class Task:
         self.id = len(tasks) + 1
         self.description = description
         self.status = "todo"
-        self.created_at = str(datetime.now().strftime(":%Y-%m-%d %H:%M:%S"))
+        self.created_at = str(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
         self.updated_at = self.created_at
 
     def update_description(self, description):
         self.description = description
-        self.updated_at = str(datetime.now().strftime(":%Y-%m-%d %H:%M:%S"))
+        self.updated_at = str(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
 
     def update_status(self, status):
         self.status = status
-        self.updated_at = str(datetime.now().strftime(":%Y-%m-%d %H:%M:%S"))
+        self.updated_at = str(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
 
 
 def find_task_by_id(id):
@@ -59,14 +60,12 @@ def list(status=None):
         if status and task.status != status:
             continue
         print(
-            f"{'-' * 33}\n"
+            f"{'-' * 32}\n"
             f"ID         : {task.id}\n"
             f"Description: {task.description}\n"
             f"Status     : {task.status}\n"
             f"Created at : {task.created_at}\n"
             f"Updated at : {task.updated_at}\n"
-            f"{'-' * 33}"
+            f"{'-' * 32}\n"
         )
-
-
 
