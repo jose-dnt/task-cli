@@ -32,13 +32,19 @@ def find_task_by_id(id):
 def add_task(description):
     task = Task(description)
     tasks.append(task)
+    return task
 
 
-def update(id, description):
+def update_task(id, description):
     task = find_task_by_id(id)
     if not task:
         return
     task.update_description(description)
+
+
+def delete_task(id):
+    task = find_task_by_id(id)
+    tasks.remove(task)
 
 
 def mark_in_progress(id):
@@ -55,9 +61,9 @@ def mark_done(id):
     task.update_status("done")
 
 
-def list(status=None):
+def list_tasks(status=None):
     for task in tasks:
-        if status and task.status != status:
+        if status and task.status != status.lower():
             continue
         print(
             f"{'-' * 32}\n"
@@ -68,4 +74,3 @@ def list(status=None):
             f"Updated at : {task.updated_at}\n"
             f"{'-' * 32}\n"
         )
-
