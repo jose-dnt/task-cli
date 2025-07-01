@@ -1,4 +1,3 @@
-import sys
 from datetime import datetime
 
 tasks = []
@@ -27,6 +26,11 @@ def find_task_by_id(id):
             return task
     else:
         return None
+
+
+def filter_tasks_by_status(status):
+    filtered_tasks = list(filter(lambda task: (task.status == status), tasks))
+    return filtered_tasks
 
 
 def add_task(description):
@@ -62,15 +66,18 @@ def mark_done(id):
 
 
 def list_tasks(status=None):
-    for task in tasks:
-        if status and task.status != status.lower():
-            continue
+    tasks_list = tasks
+
+    if status:
+        tasks_list = filter_tasks_by_status(status.lower())
+
+    for task in tasks_list:
         print(
             f"{'-' * 32}\n"
             f"ID         : {task.id}\n"
             f"Description: {task.description}\n"
             f"Status     : {task.status}\n"
             f"Created at : {task.created_at}\n"
-            f"Updated at : {task.updated_at}\n"
-            f"{'-' * 32}\n"
+            f"Updated at : {task.updated_at}"
+            f"{f'\n{"-" * 32}' if tasks_list[-1] == task else ''}"
         )
