@@ -1,6 +1,7 @@
 # Simple CLI Task Manager
 
-A simple, Python-based command-line tool for managing personal tasks.  
+A simple, Python-based command-line tool for managing personal tasks.
+This project is an implementation of the Task Tracker project from [roadmap.sh](https://roadmap.sh/projects/task-tracker).
 
 ---
 
