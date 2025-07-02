@@ -101,6 +101,7 @@ def delete_task(id):
     tasks_list.remove(task)
     return task
 
+
 def mark_in_progress(id):
     task = find_task_by_id(id)
     if not task:
@@ -147,52 +148,88 @@ def list_tasks(status=None):
 def main():
     arguments = sys.argv[1:]
 
-    # If at least one argument is passed
-    if len(arguments) > 0:
-        # Matches the first argument (task action) to its respective command
-        match arguments[0]:
-            case "add":
-                if len(arguments[1:]) > 0:
-                    description = " ".join(arguments[1:])
-                    added_task = add_task(description)
-                    print(f"Task {added_task['id']} added: {added_task['description']}")
-            case "update":
-                if len(arguments[1:]) > 1:
-                    id = validate_id(int(arguments[1]))
-                    description = " ".join(arguments[2:])
-                    if id:
-                        updated_task = update_task(id, description)
-                        print(f"Task {updated_task['id']} updated: {updated_task['description']}")
-            case "delete":
-                if len(arguments[1:]) > 0:
-                    id = validate_id(int(arguments[1]))
-                    if id:
-                        deleted_task = delete_task(id)
-                        print(f"Task {deleted_task['id']} deleted: {deleted_task['description']}")
+    if not arguments:
+        print("""
+Usage:
+    add <description>
+    update <id> <new description>
+    delete <id>
+    mark-in-progress <id>
+    mark-done <id>
+    list [status]
+""")
+        return
 
-            case "mark-in-progress":
-                if len(arguments[1:]) > 0:
-                    id = validate_id(int(arguments[1]))
-                    if id:
-                        marked_task = mark_in_progress(id)
+    match arguments[0]:
+        case "add":
+            if arguments[1:]:
+                description = " ".join(arguments[1:])
+                added_task = add_task(description)
+                print(f"Task {added_task['id']} added: {added_task['description']}")
+            else:
+                print("Description required.")
+        case "update":
+            if len(arguments) > 2:
+                id = validate_id(int(arguments[1]))
+                description = " ".join(arguments[2:])
+                if id:
+                    updated_task = update_task(id, description)
+                    print(
+                        f"Task {updated_task['id']} updated: {updated_task['description']}"
+                    )
+                else:
+                    print("Task ID not found.")
+            else:
+                print("Usage: update <id> <new description>")
+        case "delete":
+            if len(arguments) > 1:
+                id = validate_id(int(arguments[1]))
+                if id:
+                    deleted_task = delete_task(id)
+                    if deleted_task:
                         print(
-                            f"Task {marked_task['id']} marked as in-progress: {marked_task['description']}"
+                            f"Task {deleted_task['id']} deleted: {deleted_task['description']}"
                         )
-            case "mark-done":
-                if len(arguments[1:]) > 0:
-                    id = validate_id(int(arguments[1]))
-                    if id:
-                        marked_task = mark_done(id)
-                        print(f"Task {marked_task['id']} marked as done: {marked_task['description']}")
-            case "list":
-                status = None
-                if len(arguments[1:]) > 0:
-                    status = arguments[1]
-                list_tasks(status)
+                    else:
+                        print("Task not found for deletion.")
+                else:
+                    print("Task ID not found.")
+            else:
+                print("Usage: delete <id>")
+        case "mark-in-progress":
+            if len(arguments) > 1:
+                id = validate_id(int(arguments[1]))
+                if id:
+                    marked_task = mark_in_progress(id)
+                    print(
+                        f"Task {marked_task['id']} marked as in-progress: {marked_task['description']}"
+                    )
+                else:
+                    print("Task ID not found.")
+            else:
+                print("Usage: mark-in-progress <id>")
+        case "mark-done":
+            if len(arguments) > 1:
+                id = validate_id(int(arguments[1]))
+                if id:
+                    marked_task = mark_done(id)
+                    print(
+                        f"Task {marked_task['id']} marked as done: {marked_task['description']}"
+                    )
+                else:
+                    print("Task ID not found.")
+            else:
+                print("Usage: mark-done <id>")
+        case "list":
+            status = None
+            if arguments[1:]:
+                status = arguments[1]
+            list_tasks(status)
+        case _:
+            print("Unknown command.")
 
-        # Save the current task list to the JSON file
-        with open("tasks.json", mode="w") as f:
-            json.dump(tasks_list, f, indent=4)
+    with open("tasks.json", mode="w") as f:
+        json.dump(tasks_list, f, indent=4)
 
 
 # ----------------------------------------------------------------------------
